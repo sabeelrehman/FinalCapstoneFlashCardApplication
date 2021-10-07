@@ -1,0 +1,97 @@
+<template>
+  <div>
+    <h1>Update your card here</h1>
+    <form v-on:submit.prevent="updateCard">
+      Front Info: <input type="text" v-model="currentCard.frontInfo" />
+      <br />
+      <br />
+      Back Info: <input type="text" v-model="currentCard.backInfo" />
+      <br />
+      <br />
+      Card tag: <input type="text" v-model="currentCard.cardTag" />
+      <br />
+      <br />
+      Is this flashcard Public?:
+      <select id="card-is-public" v-model="currentCard.isPublic">
+        <option value="true" selected>True</option>
+        <option value="false">False</option>
+      </select>
+      <br />
+      <br />
+      <button>Update Card!</button>
+      <br />
+      <br />
+    </form>
+  </div>
+</template>
+
+<script>
+import CardService from "../services/CardService";
+export default {
+  props: ['currentCard'],
+  created() {
+    this.cardId = this.$route.params.cardId;
+    
+  },
+  data() {
+    return {
+      //currentCard: {},
+      cardId: -1
+    };
+  },
+  methods: {
+    updateCard() {
+     // console.log("DEBUG");
+       this.currentCard.cardId = this.cardId;
+     // console.log(this.currentCard);
+
+      CardService.updateCard(this.currentCard)
+        .then(() => {
+          window.alert("Card info has been updated!");
+          this.$router.push({ name: "display" });
+        })
+        .catch((error) => {
+          if (error.response) {
+            window.alert("Nice try! You failed >:O!");
+          }
+        });
+    },
+  },
+};
+
+//  export default {
+//     props: {
+//      cardId: Number,
+//    },
+//    data() {
+//      return { card: []};
+//    },
+//    created() {
+//      console.log(this.$route.params.id);
+//      CardService.get(this.$route.params.id).then((cardData) => {
+//        this.card = cardData.data;
+//      });
+//    },
+//    methods: {
+//      updateCard() {
+//        const newCard = {
+//          frontInfo: this.card.frontInfo,
+//          backInfo: this.card.backInfo,
+//          cardTag: this.card.cardTag,
+//          isPublic: this.card.isPublic,
+//        };
+//        CardService
+//          .update(newCard)
+//          .then((response) => {
+//            if (response.status === 200) {
+//              alert("card updated!");
+//              this.$router.push("/display");
+//            }
+//          })
+//          .catch((err) => {
+//            console.error(err + " problem updating card!");
+//          });
+//      },
+//    },
+// };
+</script>

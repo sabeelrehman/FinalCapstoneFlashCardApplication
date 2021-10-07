@@ -1,0 +1,22 @@
+Example in DisplayCard.vue:
+
+<script>
+import cardService from "../services/CardService";
+
+export default {
+  data() {
+    return { allTheCards: []};
+  },
+
+  created() {
+    cardService
+      .list()
+      .then((cardData) => {
+        this.allTheCards = cardData.data;
+      })
+      .catch((err) => {
+        console.error(err + " uh oh missing cards!");
+      });
+  },
+};
+</script>
